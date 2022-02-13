@@ -1,4 +1,5 @@
 import React, { HTMLAttributes, ReactNode } from "react";
+import { getStyles } from "../../utils/getStyles";
 
 import "/src/styles/global.css";
 
@@ -24,33 +25,13 @@ const Button = ({ className, children, variant, ...rest }: ButtonProps) => {
 export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   className?: string;
   children: ReactNode;
-  // Select which variant style
-  variant?: "primary" | "secondary" | `${mainVariant}_${subVariant}`;
+  variant?:
+    | "primary"
+    | "secondary"
+    | `${mainVariant}_${subVariant}`
+    | undefined;
 }
 type mainVariant = "primary" | "secondary";
 type subVariant = "small" | "large";
 
 export default Button;
-
-export const getStyles = (variant: variant, styleObject: styleObject) => {
-  if (!variant) return styleObject.base;
-
-  if (!variant.includes("_"))
-    return styleObject.base.concat(" ", styleObject[variant]);
-
-  let res = variant
-    .split("_")
-    .reduce((memo, v) => memo.concat(" ", styleObject[v]), "");
-
-  return styleObject.base.concat(" ", res);
-};
-
-export interface styleObject {
-  [propertyName: string]: string;
-}
-
-type variant =
-  | "primary"
-  | "secondary"
-  | `${mainVariant}_${subVariant}`
-  | undefined;
